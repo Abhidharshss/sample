@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
+    <link href="{% static 'css/adm.css' %}" rel="stylesheet">
+    {% if msg != "" and msg != null %}
+    <script>alert("{{msg}}");</script>
+    {% endif %}
+</head>
+
+<body class="row d-flex justify-content-center">
+    <table class="table table-hover table-bordered table-light ">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Sino: </th>
+                <th scope="col">First name</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in data %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{d.firstname}}</td>
+                <td>{{d.email}}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <button
+                          id="btnGroupVerticalDrop1"
+                          type="button"
+                          class="btn btn-info dropdown-toggle"
+                          data-mdb-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          Action
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="btnGroupVerticalDrop1">
+                          <li><a class="dropdown-item" data-bs-toggle="modal"
+                            data-bs-target="#edit-{{d.userid}}" href="#">Dropdown link</a></li>
+                          <li><a class="dropdown-item" data-toggle="modal"
+                            data-target="#delete-{{d.userid}}" href="#">Dropdown link</a></li>
+                        </ul>
+                      </div>
+                </td>
+                <div class="modal right fade" id="delete-{{d.userid}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-side modal-top-right">
+                        <div class="modal-content">
+                            <div class="modal-header bg-danger">
+                                <h5 class="modal-title text-white" id="exampleModalLabel">
+                                    Deleting user</h5>
+                                <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form method="post" enctype="multipart/form-data" action="{% url 'delusr' %}">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{d.userid}}" name="uid">
+                                <div class="modal-body text-center">
+
+                                    <i class="fas fa-skull-crossbones fa-4x mb-4"></i>
+
+                                    <p>Do you want to delete the user?</p>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center">
+                                    <button type="button" class="btn btn-outline-primary"
+                                        data-mdb-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="edit-{{d.userid}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header bg-secondary">
+                                <h5 class="modal-title text-dark-50" id="exampleModalLabel">Edit
+                                    user details</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <form method="post" enctype="multipart/form-data" action="" onsubmit="">
+                                <div class="modal-body">
+
+                                    <div class="form-outline mb-4">
+                                        <input type="text" id="form4Example1" class="form-control" name="firstname" />
+                                        <label class="form-label" for="form4Example1">first
+                                            name</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="text" id="form4Example1" class="form-control" name="lastname" />
+                                        <label class="form-label" for="form4Example1">last
+                                            name</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="form4Example2" class="form-control" name="email" />
+                                        <label class="form-label" for="form4Example2">Email
+                                            address</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="form4Example2" class="form-control" name="phone" />
+                                        <label class="form-label" for="form4Example2">Phone</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <textarea class="form-control" id="form4Example3" rows="4"
+                                            name="address"></textarea>
+                                        <label class="form-label" for="form4Example3">Address</label>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-mdb-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/adm.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/register.js' %}"></script>
+</body>
+
+</html>
