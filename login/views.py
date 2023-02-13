@@ -40,6 +40,7 @@ def logi(request):
     if request.POST:
         username = request.POST['username']
         password = request.POST['password']
+        print(username)
         datac=log.objects.filter(username=username,password=password).count()
         if datac==1:
             data=log.objects.get(username=username,password=password)
